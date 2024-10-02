@@ -54,14 +54,14 @@ public class Ex4 {
             double x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
             System.out.printf("""
                     Уравнение имеет два корня:
-                    x1 = %.2f
-                    x2 = %.2f
+                    x1 = %s
+                    x2 = %s
                     """, x1, x2);
         } else if (discriminant == 0) {
             double x = -b / (2 * a);
             System.out.printf("""
                     Уравнение имеет один корень:
-                    x = %.2f
+                    x = %s
                     """, x);
         } else {
             System.out.println("Уравнение не имеет действительных корней.");

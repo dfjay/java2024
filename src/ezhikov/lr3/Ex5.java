@@ -1,30 +1,31 @@
-package ezhikov.lr2;
+package ezhikov.lr3;
 
 import java.util.Scanner;
 
 /**
+ * Задание 5. (продолжение работы над программой из л/р 2)
  * Доработать программу:
- * 	добавить главное меню программы, основанное на цикле while, в котором есть как минимум:
- * o	выполнить расчет (созвучно смыслу программы)
- * o	информация о программе
- * o	информация о разработчике
- * o	выход из программы
- * 	при вводе неправильных данных предлагать пользователю повторить ввод, пока не будут получены верные данные или не получена команда на выход из программы
- * 	произвести декомпозицию исходной программы, реализовав статические методы для отдельных ее частей
+ * 	найти применение массивам:
+ * o	для хранения параметров вычисления
+ * o	для перемещения данных между статическими методами
+ * o	пр.
  */
 public class Ex5 {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final double[][] equationHistory = new double[10][3];
+    private static int historyIndex = 0;
 
     public static void main(String[] args) {
         boolean running = true;
         while (running) {
             printMenu();
-            int choice = getValidIntInput("Выберите действие: ", 1, 4);
+            int choice = getValidIntInput("Выберите действие: ", 1, 5);
             switch (choice) {
                 case 1 -> solveQuadraticEquation();
                 case 2 -> showProgramInfo();
                 case 3 -> showDeveloperInfo();
-                case 4 -> running = false;
+                case 4 -> showHistory();
+                case 5 -> running = false;
             }
         }
         System.out.println("Программа завершена.");
@@ -35,7 +36,8 @@ public class Ex5 {
         System.out.println("1. Решить квадратное уравнение");
         System.out.println("2. Информация о программе");
         System.out.println("3. Информация о разработчике");
-        System.out.println("4. Выход");
+        System.out.println("4. История вычислений");
+        System.out.println("5. Выход");
     }
 
     private static void solveQuadraticEquation() {
@@ -69,6 +71,8 @@ public class Ex5 {
         }
         double c = scanner.nextDouble();
 
+        saveToHistory(a, b, c);
+
         double discriminant = b * b - 4 * a * c;
 
         System.out.println("Результаты:");
@@ -91,10 +95,32 @@ public class Ex5 {
         }
     }
 
+    private static void saveToHistory(double a, double b, double c) {
+        equationHistory[historyIndex][0] = a;
+        equationHistory[historyIndex][1] = b;
+        equationHistory[historyIndex][2] = c;
+        historyIndex = (historyIndex + 1) % 10;
+    }
+
+    private static void showHistory() {
+        System.out.println("История вычислений (последние 10 уравнений):");
+        boolean hasHistory = false;
+        for (double[] equation : equationHistory) {
+            if (equation[0] != 0) {
+                System.out.printf("%sx^2 + %sx + %s = 0\n", equation[0], equation[1], equation[2]);
+                hasHistory = true;
+            }
+        }
+        if (!hasHistory) {
+            System.out.println("История пуста");
+        }
+    }
+
     private static void showProgramInfo() {
         System.out.println("Информация о программе:");
         System.out.println("Эта программа решает квадратное уравнение вида ax^2 + bx + c = 0");
-        System.out.println("Версия: 1.0");
+        System.out.println("Версия: 1.1");
+        System.out.println("Добавлена функция хранения истории вычислений");
     }
 
     private static void showDeveloperInfo() {
